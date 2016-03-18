@@ -42,7 +42,7 @@ public class ListFileTest extends TestCase {
       public void run() {
         boolean interrupted = false;
         while (!interrupted) {
-          System.out.println(String.format("%s, count=%d, level=%d", lastDir, count, level));
+          System.out.printf("%s, count=%d, level=%d\n", lastDir, count, level);
           try {
             Thread.sleep(5000L);
           } catch (InterruptedException e) {
