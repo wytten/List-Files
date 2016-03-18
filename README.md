@@ -1,7 +1,7 @@
 # List-Files
 See https://www.eclipse.org/forums/index.php/t/1075739/
 
-Demonstrates how links within the filesystem cause commit to hang using egit Eclipse plugin, which uses java.io.File listFiles 
+Demonstrates how circular links within the filesystem cause commit to hang using egit Eclipse plugin, which uses java.io.File listFiles 
 method.
 
 ```
