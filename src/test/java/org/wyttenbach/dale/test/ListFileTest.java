@@ -38,7 +38,7 @@ public class ListFileTest {
   
   @Test
   public void testListFiles() throws Exception {
-    File home = new File(System.getenv("TEMP"));
+    File home = new File(System.getenv("USERPROFILE"));
     Assert.assertTrue(home.isDirectory());
     Thread thread = new Thread(new Runnable() {
 
