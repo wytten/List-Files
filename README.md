@@ -1,6 +1,15 @@
 # List-Files
 See https://www.eclipse.org/forums/index.php/t/1075739/
 
+Links within the filesytem cause commit to hang using egit Eclipse plugin
+
+bash$ pwd
+/c/Users/dwyttenb
+bash$ find . -type l -ls | head -1
+281474976832258      0 lrwxrwxrwx   1  dwyttenb 1049089        31 Jul 31  2014 ./AppData/Local/Application\ Data -> /c/Users/dwyttenb/AppData/Local
+
+
+
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
