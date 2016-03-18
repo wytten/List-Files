@@ -2,13 +2,15 @@ package org.wyttenbach.dale.test;
 
 import java.io.File;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
+
 
 /**
  * https://www.eclipse.org/forums/index.php/t/1075739/
  */
-public class ListFileTest extends TestCase {
+public class ListFileTest {
 
   private int count = 0;
 
@@ -29,12 +31,14 @@ public class ListFileTest extends TestCase {
     level--;
   }
 
+  @After
   public void tearDown() {
     System.out.println(count);
   }
   
+  @Test
   public void testListFiles() throws Exception {
-    File home = new File(System.getenv("USERPROFILE"));
+    File home = new File(System.getenv("TEMP"));
     Assert.assertTrue(home.isDirectory());
     Thread thread = new Thread(new Runnable() {
 
