@@ -1,7 +1,7 @@
 # List-Files
 See https://www.eclipse.org/forums/index.php/t/1075739/
 
-Links within the filesytem cause commit to hang using egit Eclipse plugin
+Links within the filesystem cause commit to hang using egit Eclipse plugin
 
 ```
 bash$ pwd
