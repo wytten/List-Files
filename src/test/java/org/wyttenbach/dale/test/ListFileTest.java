@@ -28,7 +28,9 @@ public class ListFileTest {
     File[] dirContents = dir.listFiles();
     for (File file : dirContents) {
       if (file.isDirectory()) { 
-      // The fix is to not traverse symbolic links
+      // The fix is to not traverse symbolic links, which works on OS X
+      // however it is not working on Win 7 with java version "1.7.0_67"
+      // where isSymbolicLink incorrectly returns false
       Path path = Paths.get(file.getPath());
     	if (!Files.isSymbolicLink(path)) {
       		walk(file);
