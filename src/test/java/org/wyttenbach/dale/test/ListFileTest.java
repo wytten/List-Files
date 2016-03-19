@@ -1,6 +1,9 @@
 package org.wyttenbach.dale.test;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -24,8 +27,12 @@ public class ListFileTest {
     lastDir = dir.getAbsolutePath();
     File[] dirContents = dir.listFiles();
     for (File file : dirContents) {
-      if (file.isDirectory()) {
-        walk(file);
+      if (file.isDirectory()) { 
+      // The fix is to not traverse symbolic links
+      Path path = Paths.get(file.getPath());
+    	if (!Files.isSymbolicLink(path)) {
+      		walk(file);
+      	}
       }
     }
     level--;
@@ -38,7 +45,12 @@ public class ListFileTest {
   
   @Test
   public void testListFiles() throws Exception {
-    File home = new File(System.getenv("USERPROFILE"));
+  	String homeDir = System.getenv("HOME");
+  	if (homeDir == null) {
+  		homeDir = System.getenv("USERPROFILE");
+  	}
+  	Assert.assertTrue(homeDir != null);
+    File home = new File(System.getenv("HOME"));
     Assert.assertTrue(home.isDirectory());
     Thread thread = new Thread(new Runnable() {
 
