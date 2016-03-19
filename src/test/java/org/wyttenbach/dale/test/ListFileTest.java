@@ -19,25 +19,29 @@ public class ListFileTest {
 
   private int level = 0;
   
-  private String lastDir = null;
+  private String currentPath = null;
 
   private void walk(File dir) {
     count++;
     level++;
-    lastDir = dir.getAbsolutePath();
+    currentPath = dir.getAbsolutePath();
+    
+    // Note that listFiles may return null depending on file system permissions
     File[] dirContents = dir.listFiles();
-    for (File file : dirContents) {
-      if (file.isDirectory()) { 
-      // The fix is to not traverse symbolic links, which works on OS X
-      // however it is not working on Win 7 with java version "1.7.0_67"
-      // where isSymbolicLink incorrectly returns false
-      Path path = Paths.get(file.getPath());
-    	if (!Files.isSymbolicLink(path)) {
-      		walk(file);
-      	}
-      }
-    }
-    level--;
+    if (dirContents != null) {
+			for (File file : dirContents) {
+				if (file.isDirectory()) {
+					// The fix is to not traverse symbolic links, which works on OS X
+					// however it is not working on Win 7 with java version "1.7.0_67"
+					// where isSymbolicLink incorrectly returns false
+					Path path = Paths.get(file.getPath());
+					if (!Files.isSymbolicLink(path)) {
+						walk(file);
+					}
+				}
+			} 
+		}
+		level--;
   }
 
   @After
@@ -47,20 +51,20 @@ public class ListFileTest {
   
   @Test
   public void testListFiles() throws Exception {
-  	String homeDir = System.getenv("HOME");
-  	if (homeDir == null) {
-  		homeDir = System.getenv("USERPROFILE");
+  	String homePath = System.getenv("HOME"); // OS X
+  	if (homePath == null) {
+  		homePath = System.getenv("USERPROFILE"); // Win 7
   	}
-  	Assert.assertTrue(homeDir != null);
-    File home = new File(System.getenv("HOME"));
-    Assert.assertTrue(home.isDirectory());
+  	Assert.assertTrue(homePath != null);
+    File homeDir = new File(homePath);
+    Assert.assertTrue(homeDir.isDirectory());
     Thread thread = new Thread(new Runnable() {
 
       @Override
       public void run() {
         boolean interrupted = false;
         while (!interrupted) {
-          System.out.printf("%s, count=%d, level=%d\n", lastDir, count, level);
+          System.out.printf("%s, count=%d, level=%d\n", currentPath, count, level);
           try {
             Thread.sleep(5000L);
           } catch (InterruptedException e) {
@@ -71,6 +75,6 @@ public class ListFileTest {
     });
 
     thread.start();
-    walk(home);
+    walk(homeDir);
   }
 }
